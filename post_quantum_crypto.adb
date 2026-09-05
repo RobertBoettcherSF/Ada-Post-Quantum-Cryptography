@@ -35,7 +35,7 @@ package body Post_Quantum_Crypto is
       SK       : out Secret_Key;
       PK       : out Public_Key)
    is
-      B_Vec : Vector_M := (others => 0);
+      B_Vec : Vector_M := [others => 0];
    begin
       SK.S := S_Vector;
       PK.A := A_Matrix;
@@ -96,7 +96,7 @@ package body Post_Quantum_Crypto is
    is
       Gen   : Element_RNG.Generator;
       R_Vec : Vector_M;
-      U_Vec : Vector_N := (others => 0);
+      U_Vec : Vector_N := [others => 0];
       V_Val : Element := 0;
       CT    : Ciphertext;
    begin
