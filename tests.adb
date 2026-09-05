@@ -21,9 +21,9 @@ procedure Tests is
    CT, CT2 : Ciphertext;
    
    --  Test variables
-   A_Mat : constant Matrix_M_N := (others => (others => 1));
-   S_Vec : constant Vector_N   := (others => 2);
-   E_Vec : constant Vector_M   := (others => 0);
+   A_Mat : constant Matrix_M_N := [others => [others => 1]];
+   S_Vec : constant Vector_N   := [others => 2];
+   E_Vec : constant Vector_M   := [others => 0];
    
    Inner : Element;
 begin
@@ -61,7 +61,7 @@ begin
    -- TEST 5 — Non-Preemptive Batch Message (All Zeros)
    Put_Line ("TEST 5 — Batch Variant: All Zeros");
    declare
-      Msg : constant Bit_Array (1 .. 10) := (others => 0);
+      Msg : constant Bit_Array (1 .. 10) := [others => 0];
       CTs : constant Ciphertext_Array := Encrypt_Message (101, PK, Msg);
       Dec : constant Bit_Array := Decrypt_Message (SK, CTs);
    begin
@@ -73,7 +73,7 @@ begin
    -- TEST 6 — Non-Preemptive Batch Message (All Ones)
    Put_Line ("TEST 6 — Batch Variant: All Ones");
    declare
-      Msg : constant Bit_Array (1 .. 10) := (others => 1);
+      Msg : constant Bit_Array (1 .. 10) := [others => 1];
       CTs : constant Ciphertext_Array := Encrypt_Message (102, PK, Msg);
       Dec : constant Bit_Array := Decrypt_Message (SK, CTs);
    begin
@@ -85,7 +85,7 @@ begin
    -- TEST 7 — Batch Message (Alternating)
    Put_Line ("TEST 7 — Batch Variant: Alternating Bits");
    declare
-      Msg : constant Bit_Array (1 .. 4) := (0, 1, 0, 1);
+      Msg : constant Bit_Array (1 .. 4) := [0, 1, 0, 1];
       CTs : constant Ciphertext_Array := Encrypt_Message (103, PK, Msg);
       Dec : constant Bit_Array := Decrypt_Message (SK, CTs);
    begin
@@ -97,10 +97,10 @@ begin
    -- TEST 8 — Error Handling (Edge Cases)
    Put_Line ("TEST 8 — Edge Cases & Preconditions");
    Check ("8.1 Is_Valid_Ciphertext traps all-zero state", 
-          Is_Valid_Ciphertext ((U => (others => 0), V => 0)) = False);
+          Is_Valid_Ciphertext ((U => [others => 0], V => 0)) = False);
    begin
       declare
-         Empty_Msg : constant Bit_Array (1 .. 0) := (others => 0);
+         Empty_Msg : constant Bit_Array (1 .. 0) := [others => 0];
          Dummy     : constant Ciphertext_Array := Encrypt_Message (1, PK, Empty_Msg);
       begin
          Check ("8.2 Encrypt_Message bypasses exception", False);
@@ -110,7 +110,7 @@ begin
    end;
    begin
       declare
-         Empty_CTs : constant Ciphertext_Array (1 .. 0) := (others => CT);
+         Empty_CTs : constant Ciphertext_Array (1 .. 0) := [others => CT];
          Dummy     : constant Bit_Array := Decrypt_Message (SK, Empty_CTs);
       begin
          Check ("8.3 Decrypt_Message bypasses exception", False);
@@ -136,7 +136,7 @@ begin
    Check ("10.3 Different seed diverges U(16)", CT.U (16) /= CT2.U (16));
 
    -- Pre-calculate inner product for mathematical threshold testing (Tests 11-14)
-   CT.U := (others => 1);
+   CT.U := [others => 1];
    Inner := 0;
    for J in Index_N loop
       Inner := Inner + CT.U (J) * SK.S (J);
